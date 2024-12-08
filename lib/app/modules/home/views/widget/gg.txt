@@ -1,0 +1,183 @@
+  Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: InkWell(
+                        onTap: () {},
+                        child: Ink(
+                            width: 100,
+                            height: 40,
+                            child: Center(
+                                child: Text(
+                              'Acomedy',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 15),
+                            ))),
+                        focusColor: Colors.black,
+                        highlightColor: Colors.black,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+
+
+
+
+
+
+
+
+
+
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:movie_app/app/modules/home/controllers/home_controller.dart';
+import 'package:movie_app/app/modules/movie_detail/views/movie_detail_view.dart';
+
+class RecommenedPage extends StatefulWidget {
+  const RecommenedPage({super.key});
+
+  @override
+  State<RecommenedPage> createState() => _RecommenedPageState();
+}
+
+class _RecommenedPageState extends State<RecommenedPage> {
+  // Sample Data
+  final List<String> images = [
+    'assets/m1.jpeg',
+    'assets/m2.jpeg',
+    'assets/m1.jpeg',
+    'assets/m2.jpeg',
+    'assets/m1.jpeg',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    var recontroller=Get.put( HomeController());
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 30, right: 17, bottom: 10),
+              child: Text(
+                'Recommended for you',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            const Spacer(),
+            InkWell(
+              onTap: () {
+                Get.toNamed('/recommened-detail-page');
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(right: 20),
+                child: Text(
+                  'See All',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            )
+          ],
+        ),
+        SizedBox(height: 17,),
+
+        //recommended card
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal, // Horizontal scrolling
+          child: Padding(
+            padding: const EdgeInsets.only(left: 15),
+            child: Row(
+              children: List.generate(
+                recontroller.allcards.length,
+                (index) => Container(
+                  width: 170, // Set fixed width for each card
+                  margin: const EdgeInsets.symmetric(horizontal: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[850],
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                          Get.toNamed('/movie-detail');
+                        },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 230, // Set height for the image
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(20),
+                            ),
+                            image: DecorationImage(
+                              image: AssetImage(recontroller.allcards[index].image), // Movie image
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                              Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          recontroller.allcards[index].name,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                                              ),
+                                              Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(
+                         recontroller.allcards[index].description,
+                          style: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 12,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                                              ),
+                                              Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.favorite,
+                              color: Colors.white,
+                              size: 14,
+                            ),
+                            const SizedBox(width: 5),
+                            Text(
+                              recontroller.allcards[index].quantity.toString(), // Rating value
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                                              ),
+                          ],
+                        )
+                      
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
