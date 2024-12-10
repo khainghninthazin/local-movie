@@ -1,185 +1,371 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:movie_app/app/data/color_constants.dart';
-
 import 'package:movie_app/app/modules/movie_detail/controllers/movie_detail_controller.dart';
-import 'package:movie_app/app/modules/movie_detail/views/moviestack_view.dart';
 
-// ignore: must_be_immutable
 class MovieDetailsView extends StatelessWidget {
-  MovieDetailsView({super.key});
-  var mcontroller = Get.put(MovieDetailsController);
+  const MovieDetailsView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final mcontroller = Get.put(MovieDetailsController());
+
     return Scaffold(
       backgroundColor: ColorConsts.backgroun,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              
-              // Movie Poster and Back/Favorite Icons
-              Stack(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 500,
-                    decoration: BoxDecoration(
-                      image: const DecorationImage(
-                        image: AssetImage(
-                            'assets/m2.jpeg'), // Replace with your image asset
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    child: Container(
+      body: SingleChildScrollView(
+        child: Obx(() {
+          // Check if movieDetails is null or loading
+          if (mcontroller.movieDetails.value == null) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          final movie = mcontroller.movieDetails.value!;
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    // Background Image
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 550,
                       decoration: BoxDecoration(
-                        color: ColorConsts.backgroun!
-                            .withOpacity(0.7), // Adjust opacity here
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            'https://image.tmdb.org/t/p/w500/${movie.posterPath}',
+                          ),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: ColorConsts.backgroun!.withOpacity(0.9),
+                        ),
                       ),
                     ),
-                  ),
 
-                  // Movie Title and Release Date
+                    Positioned(
+                        top: 50,
+                        child: Column(
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width,
+                              padding: EdgeInsets.only(left: 10, right: 10),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  IconButton(
+                                      onPressed: () => Get.back(),
+                                      icon: const Icon(
+                                        Icons.arrow_back_ios,
+                                        color: Colors.white,
+                                      )),
+                                  Flexible(
+                                    child: Text(
+                                      mcontroller
+                                          .movieDetails.value!.originalTitle,
+                                      style: const TextStyle(
+                                          color: Colors.white, fontSize: 20),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.all(4),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: const Icon(
+                                      Icons.favorite,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Container(
+                              height: 300,
+                              width: 200,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                    'https://image.tmdb.org/t/p/w500/${movie.posterPath}',
+                                  ),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.calendar_month,
+                                  color: Colors.white,
+                                ),
+                                Text(
+                                  movie.releaseDate,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                const SizedBox(width: 5),
+                                const SizedBox(
+                                  height: 25,
+                                  child: VerticalDivider(
+                                    color: Colors.white,
+                                    thickness: 2,
+                                  ),
+                                ),
+                                const SizedBox(width: 5),
+                                const Icon(
+                                  Icons.timer,
+                                  color: Colors.white,
+                                ),
+                                const Text('148 Minutes',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    )),
+                                const SizedBox(width: 5),
+                                const SizedBox(
+                                  height: 25,
+                                  child: VerticalDivider(
+                                    color: Colors.white,
+                                    thickness: 2,
+                                  ),
+                                ),
+                                const SizedBox(width: 5),
+                                const Icon(
+                                  Icons.local_movies,
+                                  color: Colors.white,
+                                ),
+                                const Text('Action',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    )),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.star,
+                                  color: Colors.yellow,
+                                  size: 30,
+                                ),
+                                Text(
+                                  movie.voteAverage.toString(),
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                const SizedBox(width: 20),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    // Play action
+                                  },
+                                  icon: const Icon(Icons.play_arrow),
+                                  label: const Text('Play'),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.orange,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.download,
+                                      color: Colors.white),
+                                  onPressed: () {
+                                    // Download action
+                                  },
+                                ),
+                                const SizedBox(
+                                  width: 17,
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.ios_share_sharp,
+                                      color: Colors.white),
+                                  onPressed: () {
+                                    // Share link action
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
+                        ))
+                  ],
+                ),
+                const SizedBox(height: 24),
+                // Title and Release Date
+
+                // Rating and Duration
+
+                Column(children: [
+                  SingleChildScrollView(
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              _buildBadge('13+'),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              _buildBadge('Action'),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              _buildBadge('IMAX'),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              _buildBadge('2 Trailers'),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Spacer(),
+                        const Text(
+                          '2h 13m',
+                          style: TextStyle(color: Colors.white70, fontSize: 16),
+                        )
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Positioned(
-                          top: 16,
-                          left: 16,
-                          child: InkWell(
-                            onTap: () => Get.toNamed( '/footer'),
-                            child: const Icon(
-                              Icons.arrow_back,
-                              color: Colors.white,
-                              size: 30,
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          top: 16,
-                          right: 16,
-                          child: Center(
-                            child: Text(
-                              'Spiderman Noway',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 25),
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          top: 16,
-                          right: 16,
-                          child: const Icon(Icons.favorite, color: Colors.red),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // MOvies image
-                  Positioned(
-                    top: 40,
-                    left: 30,
-                    right: 30,
-                    bottom: 30,
+                    padding: const EdgeInsets.only(left: 20, right: 20),
                     child: Column(
-                      children: [
-                        Center(
-                          child: Container(
-                            height: 400,
-                            width: 200,
-                            child: Image.asset('assets/m2.jpeg'),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Movie Description
-                  const Positioned(
-                    bottom: 100,
-                    left: 60,
-                    child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(Icons.calendar_today,
-                            color: Colors.white70, size: 16),
-                        SizedBox(width: 4),
-                        Text('2021', style: TextStyle(color: Colors.white70)),
-                        SizedBox(width: 16),
-                        Icon(Icons.access_time,
-                            color: Colors.white70, size: 16),
-                        SizedBox(width: 4),
-                        Text('148 Minutes',
-                            style: TextStyle(color: Colors.white70)),
-                        SizedBox(width: 16),
-                        Icon(Icons.movie, color: Colors.white70, size: 16),
-                        SizedBox(width: 4),
-                        Text('Action', style: TextStyle(color: Colors.white70)),
+                        const Text(
+                          'Story Line',
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Text(
+                          mcontroller.movieDetails.value!.overview!,
+                          style: TextStyle(color: Colors.grey, fontSize: 15),
+                        )
                       ],
                     ),
                   ),
-
-                  //movies rating
-                  const Positioned(
-                      bottom: 70,
-                      left: 150,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.star,
-                            color: Colors.yellow,
-                          ),
-                          Text(
-                            '4.5',
-                            style: TextStyle(color: Colors.white, fontSize: 16),
-                          )
-                        ],
-                      )),
-
-                  Positioned(
-                    bottom: 10,
-                    left: 80,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ElevatedButton.icon(
-                          onPressed: () {},
-                          icon: const Icon(Icons.play_arrow),
-                          label: const Text('Play'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.orange,
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
+                        const Text(
+                          'Cast and Crew',
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+
+                        // Wrap ListView.builder with a SizedBox or Expanded
+                        SizedBox(
+                          height: 70, // Adjust height as needed
+                          child: ListView.builder(
+                            scrollDirection:
+                                Axis.horizontal, // Use horizontal if required
+                            itemCount: 4,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Row(
+                                children: [
+                                  Container(
+                                    height: 50,
+                                    width: 50,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      image: const DecorationImage(
+                                        image: AssetImage('assets/R.jpeg'),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  const Padding(
+                                    padding: EdgeInsets.only(top: 15),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          'Willion',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20),
+                                        ),
+                                        Text(
+                                          'Director',
+                                          style: TextStyle(
+                                              color: Colors.grey, fontSize: 15),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 17,
+                                  )
+                                ],
+                              );
+                            },
                           ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.download, color: Colors.white),
-                          onPressed: () {},
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.link, color: Colors.white),
-                          onPressed: () {},
                         ),
                       ],
                     ),
                   )
-                ],
-              ),
-              const MoviestackView(),
-              const SizedBox(height: 16),
-            ]
-          ),
-        ),
+                ])
+              ],
+            ),
+          );
+        }),
       ),
     );
   }
 
+  Widget _buildBadge(String text) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.grey[800],
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Text(
+        text,
+        style: const TextStyle(color: Colors.white),
+      ),
+    );
+  }
 }

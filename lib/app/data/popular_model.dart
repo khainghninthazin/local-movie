@@ -30,6 +30,8 @@ class popularmovies {
     );
   }
 
+  get posterPath => null;
+
   // Method to convert the object to a JSON map
   Map<String, dynamic> toJson() {
     return {

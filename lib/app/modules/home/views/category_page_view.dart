@@ -79,7 +79,7 @@ class CategoryPageView extends GetView {
               //   ),
               // ),
 
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -107,25 +107,25 @@ class CategoryPageView extends GetView {
               const SizedBox(height: 10),
 
               // Display Data for Selected Category
-              Obx(() => Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: Text(
-                          'Selected Category: ${controller.selectedCategory.categoryName}',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ],
-                  )),
+              // Obx(() => Column(
+              //       children: [
+              //         Padding(
+              //           padding: const EdgeInsets.only(left: 15),
+              //           child: Text(
+              //             'Selected Category: ${controller.selectedCategory.categoryName}',
+              //             style: const TextStyle(
+              //               fontSize: 18,
+              //               color: Colors.white,
+              //             ),
+              //           ),
+              //         ),
+              //       ],
+              //     )),
             ],
           ),
         ),
 
-        SingleChildScrollView(
+         SingleChildScrollView(
           scrollDirection: Axis.horizontal, // Horizontal scrolling
           child: Padding(
             padding: const EdgeInsets.only(left: 15),
@@ -141,7 +141,8 @@ class CategoryPageView extends GetView {
                   ),
                   child: InkWell(
                     onTap: () {
-                      Get.toNamed('/movie-detail');
+                      // Navigate to the movie details page
+                      Get.toNamed( '/movie-detail', arguments: controller.popularmodel[index].id);
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,33 +151,30 @@ class CategoryPageView extends GetView {
                           children: [
                             Container(
                               height: 200, // Set height for the image
-                              decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.vertical(
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.vertical(
                                   top: Radius.circular(20),
                                 ),
                                 image: DecorationImage(
                                   image: NetworkImage(
-                                      'https://th.bing.com/th/id/R.e38c3f2ee169a496231f07d03cb9a5f2?rik=61uV2lDSXuI5zg&riu=http%3a%2f%2fthefilmstage.com%2fwp-content%2fuploads%2f2014%2f11%2famerican_heist_poster_2-620x883.png&ehk=AYEGYYioUAaq8utgpZofFbkJAOzii4yYr%2bRCasnEB7M%3d&risl=&pid=ImgRaw&r=0'), // Movie image
+                                    'https://image.tmdb.org/t/p/w500${controller.popularmodel[index].poster_path}',
+                                  ),
                                   fit: BoxFit.cover,
                                 ),
                               ),
                             ),
-                            Padding(
+                            const Padding(
                               padding: EdgeInsets.only(top: 15, left: 130),
                               child: Row(
                                 children: [
-                                  Positioned(
-                                    top: 20,
-                                    bottom: 20,
-                                    child: const Icon(
-                                      Icons.favorite,
-                                      color: Colors.black,
-                                      size: 30,
-                                    ),
+                                  Icon(
+                                    Icons.favorite,
+                                    color: Colors.black,
+                                    size: 30,
                                   ),
                                 ],
                               ),
-                            )
+                            ),
                           ],
                         ),
                         Column(
@@ -196,8 +194,7 @@ class CategoryPageView extends GetView {
                               ),
                             ),
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
                               child: Text(
                                 controller.popularmodel[index].overview,
                                 style: const TextStyle(
@@ -219,8 +216,7 @@ class CategoryPageView extends GetView {
                                   ),
                                   const SizedBox(width: 5),
                                   Text(
-                                    controller.popularmodel[index].voteCount
-                                        .toString(), // Rating value
+                                    controller.popularmodel[index].voteCount.toString(),
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 12,
@@ -230,7 +226,7 @@ class CategoryPageView extends GetView {
                               ),
                             ),
                           ],
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -239,7 +235,6 @@ class CategoryPageView extends GetView {
             ),
           ),
         ),
-
         //card movies
 
         const SizedBox(

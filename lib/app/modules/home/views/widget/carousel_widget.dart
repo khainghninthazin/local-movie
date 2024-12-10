@@ -28,29 +28,26 @@ class _CarouselWidgetState extends State<CarouselWidget> {
       children: [
         Stack(
           children: [
-            Container(
-              
-              child: CarouselSlider(
-                items: [
-                  _carouselitem('assets/m1.jpeg', 'Black Panther Wakanda Forever''On March 2, 2022'),
-                  _carouselitem('assets/m2.jpeg','Black Panther Wakanda Forever''On March 2, 2022'),
-                  _carouselitem('assets/m1.jpeg','Black Panther Wakanda Forever''On March 2, 2022')
-                ],
-          
-                options: CarouselOptions(
-                  height: 180,
-                  enlargeCenterPage: true,
-                  autoPlay: true,
-                  // aspectRatio: 16 / 9,
-                  autoPlayCurve: Curves.fastOutSlowIn,
-                  enableInfiniteScroll: true,
-                  viewportFraction: 0.8,
-                  onPageChanged: (index, reason) {
-                    setState(() {
-                      currentIndex = index;
-                    });
-                  },
-                ),
+            CarouselSlider(
+              items: [
+                _carouselitem('assets/m1.jpeg', 'Black Panther Wakanda Forever''On March 2, 2022'),
+                _carouselitem('assets/m2.jpeg','Black Panther Wakanda Forever''On March 2, 2022'),
+                _carouselitem('assets/m1.jpeg','Black Panther Wakanda Forever''On March 2, 2022')
+              ],
+                      
+              options: CarouselOptions(
+                height: 180,
+                enlargeCenterPage: true,
+                autoPlay: true,
+                // aspectRatio: 16 / 9,
+                autoPlayCurve: Curves.fastOutSlowIn,
+                enableInfiniteScroll: true,
+                viewportFraction: 0.8,
+                onPageChanged: (index, reason) {
+                  setState(() {
+                    currentIndex = index;
+                  });
+                },
               ),
             ),
             
@@ -61,8 +58,8 @@ class _CarouselWidgetState extends State<CarouselWidget> {
           activeIndex: currentIndex,
           count: images.length,
           effect: const ScrollingDotsEffect(
-            dotWidth: 8,
-            dotHeight: 8,
+            dotWidth: 13,
+            dotHeight: 6,
             activeDotColor: Colors.blue,
             dotColor: Colors.grey,
           ),

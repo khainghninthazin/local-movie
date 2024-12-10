@@ -31,6 +31,8 @@ class moviesdetail {
   final double price;
   int quantity;
 
+  static var posterPath;
+
   moviesdetail(
       {required this.id,
       required this.name,

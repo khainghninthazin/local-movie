@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 import 'package:movie_app/app/modules/home/controllers/category_page_controller.dart';
-import 'package:movie_app/app/modules/home/controllers/category_page_controller.dart';
+
 import 'package:movie_app/app/modules/home/controllers/recommened_page_controller.dart';
 
 import '../controllers/home_controller.dart';

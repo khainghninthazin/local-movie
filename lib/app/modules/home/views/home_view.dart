@@ -126,7 +126,7 @@ class HomeView extends GetView<HomeController> {
                       Container(
                         padding: const EdgeInsets.only(
                             right: 17), // Padding only on the right
-                        height: 28, // Fixed height for the container
+                        height: 20, // Fixed height for the container
                         child: Image.asset(
                           'assets/filter.png', // Path to the image in your assets
                           color: Colors.white, // Tint color for the image
